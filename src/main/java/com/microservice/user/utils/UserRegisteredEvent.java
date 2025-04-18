@@ -7,5 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 public class UserRegisteredEvent {
     private String email;
-    private String username;
+    private String name;
+    private String lastname;
 }

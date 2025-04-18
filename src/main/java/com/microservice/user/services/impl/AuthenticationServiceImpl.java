@@ -1,7 +1,7 @@
 package com.microservice.user.services.impl;
 
-import com.microservice.user.dtos.userDTO.JWTTokenDTO;
-import com.microservice.user.dtos.userDTO.UserAuthenticationData;
+import com.microservice.user.dtos.UserEntityDTO.JWTTokenDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserAuthenticationData;
 import com.microservice.user.services.AuthenticationService;
 import com.microservice.user.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,9 @@
 package com.microservice.user.controllers;
 
-import com.microservice.user.dtos.userDTO.JWTTokenDTO;
-import com.microservice.user.dtos.userDTO.*;
+import com.microservice.user.dtos.UserEntityDTO.JWTTokenDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserAuthenticationData;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityRequestDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityResponseDTO;
 import com.microservice.user.exceptions.ApplicationException;
 import com.microservice.user.services.AuthenticationService;
 import com.microservice.user.services.UserEntityService;

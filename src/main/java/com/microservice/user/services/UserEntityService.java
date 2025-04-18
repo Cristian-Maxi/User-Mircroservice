@@ -1,8 +1,8 @@
 package com.microservice.user.services;
 
-import com.microservice.user.dtos.userDTO.UserEntityRequestDTO;
-import com.microservice.user.dtos.userDTO.UserEntityResponseDTO;
-import com.microservice.user.dtos.userDTO.UserEntityUpdateDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityRequestDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityResponseDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityUpdateDTO;
 
 import java.util.List;
 

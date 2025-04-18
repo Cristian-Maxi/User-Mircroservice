@@ -1,7 +1,7 @@
 package com.microservice.user.mappers;
 
-import com.microservice.user.dtos.userDTO.UserEntityRequestDTO;
-import com.microservice.user.dtos.userDTO.UserEntityResponseDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityRequestDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityResponseDTO;
 import com.microservice.user.models.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

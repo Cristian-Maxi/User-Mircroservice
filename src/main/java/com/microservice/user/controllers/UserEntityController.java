@@ -2,15 +2,17 @@ package com.microservice.user.controllers;
 
 
 import com.microservice.user.dtos.ApiResponseDTO;
-import com.microservice.user.dtos.userDTO.UserEntityResponseDTO;
-import com.microservice.user.dtos.userDTO.UserEntityUpdateDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityResponseDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityUpdateDTO;
 import com.microservice.user.exceptions.ApplicationException;
 import com.microservice.user.services.UserEntityService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -46,6 +48,15 @@ public class UserEntityController {
             }
         } catch (ApplicationException e) {
             throw new ApplicationException(" An error has occurred " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/validateUserByEmail/{email}")
+    public Long validateUserByEmail(@PathVariable String email) {
+        try {
+            return userEntityService.findIdByEmail(email);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 

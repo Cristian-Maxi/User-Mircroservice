@@ -1,7 +1,9 @@
 package com.microservice.user.services.impl;
 
 import com.microservice.user.config.RabbitMQConfig;
-import com.microservice.user.dtos.userDTO.*;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityRequestDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityResponseDTO;
+import com.microservice.user.dtos.UserEntityDTO.UserEntityUpdateDTO;
 import com.microservice.user.enums.RoleEnum;
 import com.microservice.user.exceptions.ApplicationException;
 import com.microservice.user.mappers.UserEntityMapper;
@@ -42,7 +44,7 @@ public class UserEntityServiceImpl implements UserEntityService {
         userEntity.setRole(userEntity.getEmail().contains("@admin") ? RoleEnum.ADMIN : RoleEnum.USER);
         userEntityRepository.save(userEntity);
 
-        UserRegisteredEvent event = new UserRegisteredEvent(userEntity.getEmail(), userEntity.getUsername());
+        UserRegisteredEvent event = new UserRegisteredEvent(userEntity.getEmail(), userEntity.getName(),userEntity.getLastname());
         rabbitTemplate.convertAndSend(RabbitMQConfig.USER_EXCHANGE, RabbitMQConfig.USER_ROUTING_KEY, event);
 
         return userEntityMapper.toResponseDTO(userEntity);
@@ -59,8 +61,11 @@ public class UserEntityServiceImpl implements UserEntityService {
     public UserEntityResponseDTO update(UserEntityUpdateDTO userEntityUpdateDTO) {
         UserEntity userEntity = userEntityRepository.findById(userEntityUpdateDTO.id())
                 .orElseThrow(() -> new EntityNotFoundException("User ID not Found"));
-        if(userEntityUpdateDTO.username() != null && !userEntityUpdateDTO.username().isBlank()) {
-            userEntity.setUsername(userEntityUpdateDTO.username());
+        if(userEntityUpdateDTO.name() != null && !userEntityUpdateDTO.name().isBlank()) {
+            userEntity.setName(userEntityUpdateDTO.name());
+        }
+        if(userEntityUpdateDTO.lastname() != null && !userEntityUpdateDTO.lastname().isBlank()) {
+            userEntity.setLastname(userEntityUpdateDTO.lastname());
         }
         userEntityRepository.save(userEntity);
         return userEntityMapper.toResponseDTO(userEntity);

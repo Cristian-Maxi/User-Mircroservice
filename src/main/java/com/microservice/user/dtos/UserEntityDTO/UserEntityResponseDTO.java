@@ -1,4 +1,4 @@
-package com.microservice.user.dtos.userDTO;
+package com.microservice.user.dtos.UserEntityDTO;
 
 import com.microservice.user.enums.RoleEnum;
 
