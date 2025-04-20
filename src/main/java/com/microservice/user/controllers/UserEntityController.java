@@ -6,6 +6,12 @@ import com.microservice.user.dtos.UserEntityDTO.UserEntityResponseDTO;
 import com.microservice.user.dtos.UserEntityDTO.UserEntityUpdateDTO;
 import com.microservice.user.exceptions.ApplicationException;
 import com.microservice.user.services.UserEntityService;
+import com.microservice.user.utils.RoleValidator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,27 +24,46 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
+@Tag(name = "User", description = "Endpoints for managing user entities")
 public class UserEntityController {
 
     @Autowired
     private UserEntityService userEntityService;
 
     @PatchMapping("/update")
-    public ResponseEntity<ApiResponseDTO<UserEntityResponseDTO>> updateUserEntity(@Valid @RequestBody UserEntityUpdateDTO userEntityUpdateDTO) {
+    @Operation(summary = "Update User", description = "Updates the data of a user entity. Only CLIENT role is allowed.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User updated successfully"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")})
+    public ResponseEntity<ApiResponseDTO<UserEntityResponseDTO>> updateUserEntity(@Valid @RequestBody UserEntityUpdateDTO userEntityUpdateDTO,
+                                                                                  @RequestHeader("X-User-Authorities") String roles) {
+        RoleValidator.validateRole(roles,"Access denied: You must be a CLIENT to update a user", "CLIENT");
         UserEntityResponseDTO userEntityResponseDTO = userEntityService.update(userEntityUpdateDTO);
         String message = "Client Updated Successfully";
         return new ResponseEntity<>(new ApiResponseDTO<>(true, message, userEntityResponseDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteUserEntity(@PathVariable Long id) {
+    @Operation(summary = "Delete User", description = "Deletes a user entity by ID. Only ADMIN role is allowed.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "404", description = "User not found")})
+    public ResponseEntity<?> deleteUserEntity(@PathVariable Long id, @RequestHeader("X-User-Authorities") String roles) {
+        RoleValidator.validateRole(roles,"Access denied: You must be an ADMIN or CLIENT to delete a user", "ADMIN");
         userEntityService.delete(id);
         String message = "User Successfully Deleted";
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<ApiResponseDTO<UserEntityResponseDTO>> getAllUsuarios() {
+    @Operation(summary = "Get All Users", description = "Returns a list of all registered users. Only ADMIN role is allowed.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of users returned successfully"),
+            @ApiResponse(responseCode = "403", description = "Access denied")})
+    public ResponseEntity<ApiResponseDTO<UserEntityResponseDTO>> getAllUsers(@RequestHeader("X-User-Authorities") String roles) {
+        RoleValidator.validateRole(roles,"Access denied: You must be an ADMIN to see all Users in Database", "ADMIN");
         try {
             List<UserEntityResponseDTO> userEntityResponseDTO = userEntityService.getAll();
             if (userEntityResponseDTO.isEmpty()) {
@@ -52,7 +77,11 @@ public class UserEntityController {
     }
 
     @GetMapping("/validateUserByEmail/{email}")
-    public Long validateUserByEmail(@PathVariable String email) {
+    @Operation(summary = "Validate User by Email", description = "Returns the ID of a user by their email, or 404 if not found.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User found"),
+            @ApiResponse(responseCode = "404", description = "User not found")})
+    public Long validateUserByEmail(@Parameter(description = "Email of the user to validate") @PathVariable String email) {
         try {
             return userEntityService.findIdByEmail(email);
         } catch (EntityNotFoundException e) {

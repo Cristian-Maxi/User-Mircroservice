@@ -28,15 +28,15 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.toList());
 
-        logger.error("Validación fallida: {}", errores);
+        logger.error("Validation failed: {}", errores);
 
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, "Validación fallida", errores);
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, "Validation failed", errores);
         return new ResponseEntity<>(errorResponse, errorResponse.status());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex) {
-        logger.error("Entidad no encontrada: {}", ex.getMessage());
+        logger.error("Entity not found: {}", ex.getMessage());
 
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         return new ResponseEntity<>(errorResponse, errorResponse.status());
@@ -44,15 +44,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        logger.error("Error en el formato del JSON: {}", ex.getMessage());
+        logger.error("Error in JSON format: {}", ex.getMessage());
 
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, "Error en el formato del JSON");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, "Error in JSON format");
         return new ResponseEntity<>(errorResponse, errorResponse.status());
     }
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(ValidationException ex) {
-        logger.error("Excepción de validación: {}", ex.getMessage());
+        logger.error("Validation exception: {}", ex.getMessage());
 
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         return new ResponseEntity<>(errorResponse, errorResponse.status());
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<ErrorResponse> handleApplicationException(ApplicationException ex) {
         String message = ex.getCampo() != null ? ex.getCampo() + ": " + ex.getMessage() : ex.getMessage();
-        logger.error("Excepción de aplicación: Campo={}, Mensaje={}", ex.getCampo(), ex.getMessage());
+        logger.error("Application Exception: Field={}, Message={}", ex.getCampo(), ex.getMessage());
 
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT, message);
         return new ResponseEntity<>(errorResponse, errorResponse.status());

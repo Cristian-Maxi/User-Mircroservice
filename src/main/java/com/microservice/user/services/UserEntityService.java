@@ -11,6 +11,5 @@ public interface UserEntityService {
     List<UserEntityResponseDTO> getAll();
     UserEntityResponseDTO update(UserEntityUpdateDTO userEntityUpdateDTO);
     void delete(Long id);
-    boolean existById(Long id);
     Long findIdByEmail(String email);
 }

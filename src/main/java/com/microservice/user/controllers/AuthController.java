@@ -7,6 +7,11 @@ import com.microservice.user.dtos.UserEntityDTO.UserEntityResponseDTO;
 import com.microservice.user.exceptions.ApplicationException;
 import com.microservice.user.services.AuthenticationService;
 import com.microservice.user.services.UserEntityService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Endpoints for user registration and authentication")
 public class AuthController {
     @Autowired
     private UserEntityService userEntityService;
@@ -23,6 +29,11 @@ public class AuthController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/create")
+    @Operation(summary = "Create User", description = "Creates a new user account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")})
     public ResponseEntity<UserEntityResponseDTO> createUserEntity(@Valid @RequestBody UserEntityRequestDTO userEntityRequestDTO) {
         try{
             UserEntityResponseDTO userEntityResponseDTO = userEntityService.createUser(userEntityRequestDTO);
@@ -33,6 +44,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "User Login", description = "Authenticates user and returns a JWT token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User authenticated successfully"),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")})
     public ResponseEntity<JWTTokenDTO> authenticateUser(@RequestBody @Valid UserAuthenticationData userAuthenticationData){
         JWTTokenDTO jwtTokenDTO = authenticationService.authenticate(userAuthenticationData);
         return ResponseEntity.ok(jwtTokenDTO);

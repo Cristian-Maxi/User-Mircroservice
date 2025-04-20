@@ -42,7 +42,7 @@ public class TokenServiceImpl implements TokenService {
             System.out.println("Generating token...");
             Algorithm algorithm = Algorithm.HMAC256(secretKeyConfig.getSECRET_KEY());
             return JWT.create()
-                    .withIssuer("Acreditations")
+                    .withIssuer("Java-Shark")
                     .withSubject(username)
                     .withClaim("id", userEntity.getId())
                     .withClaim("authorities", authorities)

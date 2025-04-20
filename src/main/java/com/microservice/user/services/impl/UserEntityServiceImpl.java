@@ -80,8 +80,6 @@ public class UserEntityServiceImpl implements UserEntityService {
         userEntity.setEnabled(false);
     }
 
-    @Override
-    public boolean existById(Long id) {return userEntityRepository.existsById(id);}
 
     @Override
     public Long findIdByEmail(String email) {
