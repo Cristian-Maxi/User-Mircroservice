@@ -41,7 +41,7 @@ public class UserEntityServiceImpl implements UserEntityService {
         String encodedPassword = passwordEncoder.encode(userEntityRequestDTO.password());
         UserEntity userEntity = userEntityMapper.toEntity(userEntityRequestDTO);
         userEntity.setPassword(encodedPassword);
-        userEntity.setRole(userEntity.getEmail().contains("@admin") ? RoleEnum.ADMIN : RoleEnum.USER);
+        userEntity.setRole(userEntity.getEmail().contains("@admin") ? RoleEnum.ADMIN : RoleEnum.CLIENT);
         userEntityRepository.save(userEntity);
 
         UserRegisteredEvent event = new UserRegisteredEvent(userEntity.getEmail(), userEntity.getName(),userEntity.getLastname());

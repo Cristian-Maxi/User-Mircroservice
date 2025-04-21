@@ -51,7 +51,7 @@ public class UserEntityController {
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "404", description = "User not found")})
     public ResponseEntity<?> deleteUserEntity(@PathVariable Long id, @RequestHeader("X-User-Authorities") String roles) {
-        RoleValidator.validateRole(roles,"Access denied: You must be an ADMIN or CLIENT to delete a user", "ADMIN");
+        RoleValidator.validateRole(roles,"Access denied: You must be an ADMIN or CLIENT to delete a user", "ADMIN", "CLIENT");
         userEntityService.delete(id);
         String message = "User Successfully Deleted";
         return new ResponseEntity<>(message, HttpStatus.OK);
@@ -88,5 +88,4 @@ public class UserEntityController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
-
 }

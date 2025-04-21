@@ -10,8 +10,11 @@ public record UserEntityResponseDTO(
         @Schema(description = "User email address", example = "user@example.com")
         String email,
 
-        @Schema(description = "Username displayed in the system", example = "john_doe")
-        String username,
+        @Schema(description = "Username displayed in the system", example = "Cristian")
+        String name,
+
+        @Schema(description = "Username displayed in the system", example = "Gomez")
+        String lastname,
 
         @Schema(description = "Role assigned to the user", example = "ADMIN")
         RoleEnum role
