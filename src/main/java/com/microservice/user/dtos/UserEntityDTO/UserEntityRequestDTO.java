@@ -18,6 +18,7 @@ public record UserEntityRequestDTO(
 
         @Schema(description = "User's password. Must be at least 6 characters", example = "SecureP@ss123")
         @Size(min = 6, message = "Password must be at least 6 characters long.")
+        @NotNull(message = "Password must not be null")
         String password
 ) {
 }

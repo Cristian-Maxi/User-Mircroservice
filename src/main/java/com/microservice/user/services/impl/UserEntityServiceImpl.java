@@ -76,8 +76,8 @@ public class UserEntityServiceImpl implements UserEntityService {
     public void delete(Long id) {
         UserEntity userEntity = userEntityRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("The entered User ID was not Found."));
-        // Logic Delete
         userEntity.setEnabled(false);
+        userEntityRepository.save(userEntity);
     }
 
 

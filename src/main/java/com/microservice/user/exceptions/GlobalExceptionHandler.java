@@ -67,6 +67,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, errorResponse.status());
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
+        logger.error("Access Denied: {}", ex.getMessage());
+
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.FORBIDDEN, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, errorResponse.status());
+    }
+
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<ErrorResponse> handleHttpClientErrorException(HttpClientErrorException ex) {
         logger.error("Error del cliente HTTP: Código={}, Texto={}", ex.getStatusCode(), ex.getStatusText());
