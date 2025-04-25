@@ -2,7 +2,6 @@ package com.microservice.user.services.impl;
 
 import com.microservice.user.models.UserEntity;
 import com.microservice.user.repositories.UserEntityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +14,11 @@ import java.util.List;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
-    private UserEntityRepository userEntityRepository;
+    private final UserEntityRepository userEntityRepository;
+
+    public UserDetailsServiceImpl(UserEntityRepository userEntityRepository) {
+        this.userEntityRepository = userEntityRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

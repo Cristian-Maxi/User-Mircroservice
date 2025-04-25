@@ -4,7 +4,6 @@ import com.microservice.user.dtos.UserEntityDTO.JWTTokenDTO;
 import com.microservice.user.dtos.UserEntityDTO.UserAuthenticationData;
 import com.microservice.user.services.AuthenticationService;
 import com.microservice.user.services.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,10 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private TokenService tokenService;
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
+
+    public AuthenticationServiceImpl(AuthenticationManager authenticationManager, TokenService tokenService) {
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
+    }
 
     @Override
     public JWTTokenDTO authenticate(UserAuthenticationData userAuthenticationData) {

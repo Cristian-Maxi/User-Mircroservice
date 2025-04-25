@@ -8,12 +8,10 @@ import com.microservice.user.exceptions.ApplicationException;
 import com.microservice.user.services.AuthenticationService;
 import com.microservice.user.services.UserEntityService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +20,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @Tag(name = "Authentication", description = "Endpoints for user registration and authentication")
 public class AuthController {
-    @Autowired
-    private UserEntityService userEntityService;
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    private final UserEntityService userEntityService;
+    private final AuthenticationService authenticationService;
+
+    public AuthController(UserEntityService userEntityService, AuthenticationService authenticationService) {
+        this.userEntityService = userEntityService;
+        this.authenticationService = authenticationService;
+    }
 
     @PostMapping("/create")
     @Operation(summary = "Create User", description = "Creates a new user account")

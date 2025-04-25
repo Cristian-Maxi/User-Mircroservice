@@ -4,6 +4,7 @@ package com.microservice.user.controllers;
 import com.microservice.user.dtos.ApiResponseDTO;
 import com.microservice.user.dtos.UserEntityDTO.UserEntityResponseDTO;
 import com.microservice.user.dtos.UserEntityDTO.UserEntityUpdateDTO;
+import com.microservice.user.enums.RoleEnum;
 import com.microservice.user.exceptions.ApplicationException;
 import com.microservice.user.services.UserEntityService;
 import com.microservice.user.utils.RoleValidator;
@@ -14,7 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +27,11 @@ import java.util.List;
 @Tag(name = "User", description = "Endpoints for managing user entities")
 public class UserEntityController {
 
-    @Autowired
-    private UserEntityService userEntityService;
+    private final UserEntityService userEntityService;
+
+    public UserEntityController(UserEntityService userEntityService) {
+        this.userEntityService = userEntityService;
+    }
 
     @PatchMapping("/update")
     @Operation(summary = "Update User", description = "Updates the data of a user entity. Only CLIENT role is allowed.")
@@ -38,7 +41,7 @@ public class UserEntityController {
             @ApiResponse(responseCode = "400", description = "Invalid request")})
     public ResponseEntity<ApiResponseDTO<UserEntityResponseDTO>> updateUserEntity(@Valid @RequestBody UserEntityUpdateDTO userEntityUpdateDTO,
                                                                                   @RequestHeader("X-User-Authorities") String roles) {
-        RoleValidator.validateRole(roles,"Access denied: You must be a CLIENT to update a user", "CLIENT");
+        RoleValidator.validateRole(roles,"Access denied: You must be a CLIENT to update a user", RoleEnum.CLIENT);
         UserEntityResponseDTO userEntityResponseDTO = userEntityService.update(userEntityUpdateDTO);
         String message = "Client Updated Successfully";
         return new ResponseEntity<>(new ApiResponseDTO<>(true, message, userEntityResponseDTO), HttpStatus.OK);
@@ -51,7 +54,7 @@ public class UserEntityController {
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "404", description = "User not found")})
     public ResponseEntity<?> deleteUserEntity(@PathVariable Long id, @RequestHeader("X-User-Authorities") String roles) {
-        RoleValidator.validateRole(roles,"Access denied: You must be an ADMIN or CLIENT to delete a user", "ADMIN", "CLIENT");
+        RoleValidator.validateRole(roles,"Access denied: You must be an ADMIN or CLIENT to delete a user", RoleEnum.ADMIN, RoleEnum.CLIENT);
         userEntityService.delete(id);
         String message = "User Successfully Deleted";
         return new ResponseEntity<>(message, HttpStatus.OK);
@@ -63,7 +66,7 @@ public class UserEntityController {
             @ApiResponse(responseCode = "200", description = "List of users returned successfully"),
             @ApiResponse(responseCode = "403", description = "Access denied")})
     public ResponseEntity<ApiResponseDTO<UserEntityResponseDTO>> getAllUsers(@RequestHeader("X-User-Authorities") String roles) {
-        RoleValidator.validateRole(roles,"Access denied: You must be an ADMIN to see all Users in Database", "ADMIN");
+        RoleValidator.validateRole(roles,"Access denied: You must be an ADMIN to see all Users in Database", RoleEnum.ADMIN);
         try {
             List<UserEntityResponseDTO> userEntityResponseDTO = userEntityService.getAll();
             if (userEntityResponseDTO.isEmpty()) {

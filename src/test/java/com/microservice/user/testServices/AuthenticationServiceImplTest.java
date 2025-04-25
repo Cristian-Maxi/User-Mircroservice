@@ -11,7 +11,6 @@ import com.microservice.user.services.impl.AuthenticationServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,12 +28,12 @@ public class AuthenticationServiceImplTest {
     @Mock
     private TokenService tokenService;
 
-    @InjectMocks
-    private AuthenticationServiceImpl authenticationService;
+    AuthenticationServiceImpl authenticationService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
+        authenticationService = new AuthenticationServiceImpl(authenticationManager, tokenService);
     }
 
     @Test

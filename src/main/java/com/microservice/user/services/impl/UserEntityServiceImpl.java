@@ -13,7 +13,6 @@ import com.microservice.user.services.UserEntityService;
 import com.microservice.user.utils.UserRegisteredEvent;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,20 +22,23 @@ import java.util.List;
 @Service
 public class UserEntityServiceImpl implements UserEntityService {
 
-    @Autowired
-    private UserEntityRepository userEntityRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserEntityMapper userEntityMapper;
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private final UserEntityRepository userEntityRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserEntityMapper userEntityMapper;
+    private final RabbitTemplate rabbitTemplate;
+
+    public UserEntityServiceImpl(UserEntityRepository userEntityRepository, PasswordEncoder passwordEncoder, UserEntityMapper userEntityMapper, RabbitTemplate rabbitTemplate) {
+        this.userEntityRepository = userEntityRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userEntityMapper = userEntityMapper;
+        this.rabbitTemplate = rabbitTemplate;
+    }
 
     //@Transactional(rollbackFor = Exception.class)
     @Override
     public UserEntityResponseDTO createUser(UserEntityRequestDTO userEntityRequestDTO) {
         if (userEntityRepository.existsByEmail(userEntityRequestDTO.email())) {
-            throw new ApplicationException("email", "Email does not exist in the database.");
+            throw new ApplicationException("email", "Email already exist in the database.");
         }
         String encodedPassword = passwordEncoder.encode(userEntityRequestDTO.password());
         UserEntity userEntity = userEntityMapper.toEntity(userEntityRequestDTO);

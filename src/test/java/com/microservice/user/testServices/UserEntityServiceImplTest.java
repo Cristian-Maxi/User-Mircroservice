@@ -17,7 +17,6 @@ import com.microservice.user.services.impl.UserEntityServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,12 +40,12 @@ public class UserEntityServiceImplTest {
     @Mock
     private RabbitTemplate rabbitTemplate;
 
-    @InjectMocks
-    private UserEntityServiceImpl userEntityService;
+    UserEntityServiceImpl userEntityService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
+        userEntityService = new UserEntityServiceImpl(userEntityRepository, passwordEncoder, userEntityMapper, rabbitTemplate);
     }
 
     @Test

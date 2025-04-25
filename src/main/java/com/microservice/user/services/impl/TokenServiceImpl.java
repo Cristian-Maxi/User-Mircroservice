@@ -7,7 +7,6 @@ import com.microservice.user.models.UserEntity;
 import com.microservice.user.repositories.UserEntityRepository;
 import com.microservice.user.security.variablesEnv.SecretKeyConfig;
 import com.microservice.user.services.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,11 +19,13 @@ import java.util.stream.Collectors;
 @Service
 public class TokenServiceImpl implements TokenService {
 
-    @Autowired
-    private SecretKeyConfig secretKeyConfig;
+    private final SecretKeyConfig secretKeyConfig;
+    private final UserEntityRepository userEntityRepository;
 
-    @Autowired
-    private UserEntityRepository userEntityRepository;
+    public TokenServiceImpl(SecretKeyConfig secretKeyConfig, UserEntityRepository userEntityRepository) {
+        this.secretKeyConfig = secretKeyConfig;
+        this.userEntityRepository = userEntityRepository;
+    }
 
     @Override
     public String generateToken(Authentication authentication) {
