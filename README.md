@@ -245,3 +245,32 @@ networks:
 Endpoint swagger: http://localhost:8080/swagger-ui/index.html
 
 ![User Swagger](https://github.com/user-attachments/assets/7958d8d7-313f-406e-b3c8-e479ee54d22e)
+
+
+## 📊 Diagrama de clases
+
+
+```mermaid
+
+classDiagram
+direction LR
+
+class UserEntity {
+    Long id
+    String email
+    String name
+    String lastname
+    String password
+    boolean isEnabled
+    boolean accountNoExpired
+    boolean accountNoLocked
+    boolean credentialNoExpired
+    RoleEnum role
+}
+
+class RoleEnum {
+    ADMIN
+    CLIENT
+}
+
+UserEntity --> RoleEnum : role
