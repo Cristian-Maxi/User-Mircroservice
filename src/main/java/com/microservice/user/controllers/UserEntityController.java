@@ -33,7 +33,7 @@ public class UserEntityController {
         this.userEntityService = userEntityService;
     }
 
-    @PatchMapping("/update")
+    @PutMapping("/update")
     @Operation(summary = "Update User", description = "Updates the data of a user entity. Only CLIENT role is allowed.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User updated successfully"),
