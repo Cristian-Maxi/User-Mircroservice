@@ -240,7 +240,7 @@ networks:
 
 ## ✅ Estructura de la Carpeta
 
-![Estructura de carpetas](https://github.com/user-attachments/assets/b6ff7ad2-9a19-40d1-93d3-4d98b37054b8)
+![Estructuras de carpetas](https://github.com/user-attachments/assets/d9fb516b-1b65-4875-b079-5af033adc318)
 
 
 # ⚙️ Test unitarios
