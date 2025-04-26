@@ -49,13 +49,13 @@ Este módulo gestiona la creación y autenticación de usuarios, proporcionando 
 
 ## 🔁 Endpoints – `UserEntityController - AuthController`
 
-| Método | Endpoint                 | Descripción                                  |
-|--------|--------------------------|----------------------------------------------|
-| POST   | `/api/auth/create`       | Registro de nuevo usuario                    |
-| POST   | `/api/auth/login`        | Inicio de sesión (JWT)                       |
-| GET    | `/api/user/getAll`       | Listar todos los usuarios activos            |
-| PUT    | `/api/user/update`       | Actualizar datos del usuario                 |
-| DELETE | `/api/user/delete/{id}`  | Baja lógica del usuario                      |
+| Método | Endpoint                 | Descripción                                     |
+|--------|--------------------------|-------------------------------------------------|
+| POST   | `/api/auth/create`       | Registro de nuevo usuario y envio de mensaje de bienvenida al email|
+| POST   | `/api/auth/login`        | Inicio de sesión (JWT)                          |
+| GET    | `/api/user/getAll`       | Listar todos los usuarios activos               |
+| PUT    | `/api/user/update`       | Actualizar datos del usuario                    |
+| DELETE | `/api/user/delete/{id}`  | Baja lógica del usuario                         |
 
 ---
 
